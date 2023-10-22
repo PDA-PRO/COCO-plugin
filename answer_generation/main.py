@@ -1,5 +1,4 @@
 import json
-import os
 from bs4 import BeautifulSoup
 from fastapi import Depends
 import openai
@@ -8,6 +7,7 @@ from app.core import security
 from app.db.base import DBCursor
 from app.plugin.interface import AbstractPlugin
 from pydantic import BaseModel
+import config
 
 class AskQ(BaseModel):
     content: str
@@ -157,7 +157,7 @@ class Plugin(AbstractPlugin):
     
     
 def ask_ai(prompt):
-    openai.api_key = os.getenv("CHATGPT_KEY")
+    openai.api_key = config.CHATGPT_KEY
     completion = openai.Completion.create(
     engine='text-davinci-003'  # 'text-curie-001'  # 'text-babbage-001' #'text-ada-001'
     , prompt=prompt

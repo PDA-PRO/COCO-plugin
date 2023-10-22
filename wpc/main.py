@@ -6,10 +6,10 @@ from app.db.base import DBCursor
 from app.plugin.interface import AbstractPlugin
 from app.crud.submission import submission_crud
 from app.crud.task import task_crud
+import config
 
 class Plugin(AbstractPlugin):
     router_path='/wpc'
-    wpc_docker_url='http://localhost:7555'
     feature_docs='TC 판별 중 틀린 코드에 대해, 틀린 부분을 찾아 고쳐주는 AI'
     base='GraphCodeBERT기반 제작 WPC AI 모델'
     
@@ -25,7 +25,7 @@ class Plugin(AbstractPlugin):
     def test():
         res=None
         try:
-            res= requests.get(Plugin.wpc_docker_url+'/hello')
+            res= requests.get(config.WPC_URL+'/hello')
             print(res.content)
         except:
             return False
@@ -75,7 +75,7 @@ class Plugin(AbstractPlugin):
             wpc_desc_id=task_title[0]["title"].split("wpc:")[-1]
             wpc_result=None
             try: 
-                wpc_result=requests.post(Plugin.wpc_docker_url+'/process',params={"p_id":wpc_desc_id},json={"code":sub_data[0]["code"]})
+                wpc_result=requests.post(config.WPC_URL+'/process',params={"p_id":wpc_desc_id},json={"code":sub_data[0]["code"]})
                 wpc_result=wpc_result.json()
             except:
                 wpc_result=None
