@@ -1,4 +1,5 @@
 import json
+import os
 from fastapi import Depends
 import openai
 from pydantic import BaseModel
@@ -8,18 +9,6 @@ from app.db.base import DBCursor
 from app.plugin.interface import AbstractPlugin
 import config
 
-    
-def ask_ai(prompt):
-    openai.api_key = config.CHATGPT_KEY
-    completion = openai.Completion.create(
-    engine='text-davinci-003'  # 'text-curie-001'  # 'text-babbage-001' #'text-ada-001'
-    , prompt=prompt
-    , temperature=0.5
-    , max_tokens=1024
-    , top_p=1
-    , frequency_penalty=0
-    , presence_penalty=0)
-    return completion['choices'][0]['text']
 
 class AiCode(BaseModel):
     code: str
@@ -61,23 +50,7 @@ class Plugin(AbstractPlugin):
 
         efficient_prompt = '''
 %s
-
-위 코드를 수정해서 시간, 메모리 측면에서 효율적이고 개선된 코드를 생성해줘
-
-만약 코드 수정이 필요 없을 때 다음과 같은 형식을 사용해서 출력해줘:
-{ 
-    "code": "False",
-    "desc": "",
-}
-
-코드 수정이 필요하다면 다음과 같은 형식을 사용해서 위 코드를 수정해줘
-코드의 각 라인은 줄바꿈을 정확히 지키고 주석을 추가해줘:
-{
-    "code": "<주석이 추가된 수정된 코드>",
-    "desc": "<수정된 코드에 대한 두 줄 이상의 자세한 설명>"
-}
-
-           
+          
         ''' % (info.code)
 
 
@@ -95,6 +68,7 @@ class Plugin(AbstractPlugin):
                 break
 
         efficient_result = efficient_result[start_idx: end_idx+1]
+        print('code', efficient_result)
         efficient_result = json.loads(efficient_result, strict=False)
 
         code = efficient_result['code']
@@ -108,3 +82,43 @@ class Plugin(AbstractPlugin):
             'desc': desc
         }
     
+
+def ask_ai(prompt):
+    openai.api_key = config.CHATGPT_KEY
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {
+            "role": "system",
+            "content": '''
+당신은 프로그래밍 전문가입니다.
+당신은 주어진 프로그램 코드를 분석하고 주어진 코드보다 효율적으로 개선된 코드를 다음과 같은 형식으로 제시합니다.
+
+{
+    "code": "<수정된 코드>",
+    "desc": "<수정된 코드에 대한 두 줄 이상의 자세한 설명>"
+}
+
+'''
+            },
+            {
+            "role": "user",
+            "content":prompt
+            },
+        ],
+        temperature=0,
+        max_tokens=1024,
+        top_p=1,
+        frequency_penalty=0,
+        presence_penalty=0
+    )
+    return response['choices'][0]["message"]['content']
+    # completion = openai.Completion.create(
+    # engine='text-davinci-003'  # 'text-curie-001'  # 'text-babbage-001' #'text-ada-001'
+    # , prompt=prompt
+    # , temperature=0.5
+    # , max_tokens=1024
+    # , top_p=1
+    # , frequency_penalty=0
+    # , presence_penalty=0)
+    # return completion['choices'][0]['text']
