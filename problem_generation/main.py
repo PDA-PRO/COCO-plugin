@@ -37,42 +37,10 @@ class Plugin(AbstractPlugin):
             prompt = '''
 %s
 
-
-반드시 다음과 같은 형식을 사용해서 알려주세요:
-
-{
-    "problem": {
-        "title": "<문제 제목>",
-        "description": "<문제 설명>",
-        "input": {
-            "description": "<입력 설명>"
-        },
-        "output": {
-            "description": "<출력 설명>"
-        },
-        "examples": [
-            {
-                "input": "<공백으로 구분된 입력 예시>",
-                "output": "<출력 예시>"
-            },
-            {
-                "input": "<공백으로 구분된 입력 예시>",
-                "output": "<출력 예시>"
-            }
-        ]
-    },
-    "constraints": {
-        "memory": "<메모리 제약 조건>",
-        "time": "<시간 제약 조건>"
-    },
-    "code" : {
-        "code": "<줄바꿈으로 구분된 파이썬 정답 코드>"
-    }
-}
         ''' % (info.content)
 
             # 문제 내용 JSON 변환
-            result = ask_ai(prompt)
+            result = ask_ai(prompt, task_template)
             print(result)
             start, end = 0, len(result)-1
             for i in range(len(result)):
@@ -85,28 +53,31 @@ class Plugin(AbstractPlugin):
                     break
                     
             result = result[start:end+1]
-            print(result)
             result = json.loads(result, strict=False)
+            print('task', result)
             
             return {'data': True, 'result': result}
         else:   
             # 문제 메인 설명
             description = BeautifulSoup(info.form_data, "lxml").text
+            input_desc = info.task_data["inputDescription"]
+            output_desc = info.task_data["outputDescription"]
             prompt = '''
-%s
-        
-위 문제에 대한 파이썬 테스트 케이스를 다음과 같은 형식을 사용해서 20개 만들어주세요
-{
-    "testcase": [ 
-        { 
-            "input": "<공백으로 구분된 입력 예시>",
-            "output": "<입력에 대한 출력>"
-        }
-    ]
-}
 
-''' % (description)
-            result = ask_ai(prompt)
+위 문제의 설명은 다음과 같습니다
+: %s
+
+위 문제의 입력 설명은 다음과 같습니다
+: %s
+
+위 문제의 출력 설명은 다음과 같습니다
+: %s
+
+다음 정보를 고려해서 위 문제에 대한 파이썬 테스트 케이스를 만들어 주세요
+
+''' % (description, input_desc, output_desc)
+            print(prompt)
+            result = ask_ai(prompt, tc_template)
 
             start, end = 0, len(result)-1
             for i in range(len(result)):
@@ -120,6 +91,7 @@ class Plugin(AbstractPlugin):
 
             result = result[start:end+1]
             result = json.loads(result, strict=False)
+            print('testcase', result)
             testcase = result['testcase']   # TC
             task = info.task_data # 문제 정보
 
@@ -184,132 +156,85 @@ class Plugin(AbstractPlugin):
                     if file.endswith('.txt'):
                         zip_file.write(os.path.join(path, file),os.path.join('output', file), compress_type=zipfile.ZIP_DEFLATED)
             zip_file.close()
+            return {'code': 1}
  
-def ask_ai(prompt):
+def ask_ai(prompt, template):
     openai.api_key = config.CHATGPT_KEY
-    completion = openai.Completion.create(
-    engine='text-davinci-003'  # 'text-curie-001'  # 'text-babbage-001' #'text-ada-001'
-    , prompt=prompt
-    , temperature=0.5
-    , max_tokens=1024
-    , top_p=1
-    , frequency_penalty=0
-    , presence_penalty=0)
-    return completion['choices'][0]['text']
+    # completion = openai.Completion.create(
+    # engine='text-davinci-003'  # 'text-curie-001'  # 'text-babbage-001' #'text-ada-001'
+    # , prompt=prompt
+    # , temperature=0.5
+    # , max_tokens=1024
+    # , top_p=1
+    # , frequency_penalty=0
+    # , presence_penalty=0)
+    # return completion['choices'][0]['text']
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {
+            "role": "system",
+            "content": template
+            },
+            {
+            "role": "user",
+            "content":prompt
+            },
+        ],
+        temperature=0,
+        max_tokens=1024,
+        top_p=1,
+        frequency_penalty=0,
+        presence_penalty=0
+    )
+    return response['choices'][0]["message"]['content']
 
-#         task_result = '''
-# {
-#     "problem": {
-#         "title": "숫자의 합 구하기",
-#         "description": "1부터 N까지의 숫자의 합을 구하는 알고리즘 문제입니다.",
-#         "input": {
-#             "description": "정수 N",
-#             "constraint": "1 <= N <= 10000"
-#         },
-#         "output": {
-#             "description": "1부터 N까지의 숫자의 합"
-#         },
-#         "examples": [
-#             {
-#                 "input": "5",
-#                 "output": "15"
-#             },
-#             {
-#                 "input": "10",
-#                 "output": "55"
-#             }
-#         ]
-#     },
-#   "constraints": {
-#         "memory": "256mb",
-#         "time": "2s"
-#   }
-# }
-# '''
 
-# result = '''
-#     {
-#         "testcase": [
-#             {
-#                 "input": "1",
-#                 "output": "1"
-#             },
-#             {
-#                 "input": "2",
-#                 "output": "2"
-#             },
-#             {
-#                 "input": "3",
-#                 "output": "6"
-#             },
-#             {
-#                 "input": "4",
-#                 "output": "24"
-#             },
-#             {
-#                 "input": "5",
-#                 "output": "120"
-#             },
-#             {
-#                 "input": "6",
-#                 "output": "720"
-#             },
-#             {
-#                 "input": "7",
-#                 "output": "5040"
-#             },
-#             {
-#                 "input": "8",
-#                 "output": "40320"
-#             },
-#             {
-#                 "input": "9",
-#                 "output": "362880"
-#             },
-#             {
-#                 "input": "10",
-#                 "output": "3628800"
-#             },
-#             {
-#                 "input": "11",
-#                 "output": "39916800"
-#             },
-#             {
-#                 "input": "12",
-#                 "output": "479001600"
-#             },
-#             {
-#                 "input": "13",
-#                 "output": "6227020800"
-#             },
-#             {
-#                 "input": "14",
-#                 "output": "87178291200"
-#             },
-#             {
-#                 "input": "15",
-#                 "output": "1307674368000"
-#             },
-#             {
-#                 "input": "16",
-#                 "output": "20922789888000"
-#             },
-#             {
-#                 "input": "17",
-#                 "output": "355687428096000"
-#             },
-#             {
-#                 "input": "18",
-#                 "output": "6402373705728000"
-#             },
-#             {
-#                 "input": "19",
-#                 "output": "121645100408832000"
-#             },
-#             {
-#                 "input": "20",
-#                 "output": "2432902008176640000"
-#             }
-#         ]
-#     }
-#     '''
+task_template = '''
+    당신은 알고리즘 문제 생성가입니다.
+    당신은 알고리즘 문제를 만들고, 알고리즘에 관한 정보를 다음과 같은 형식으로 제공합니다.
+    {
+        "problem": {
+            "title": "<문제 제목>",
+            "description": "<문제 설명>",
+            "input": {
+                "description": "<입력 설명>"
+            },
+            "output": {
+                "description": "<출력 설명>"
+            },
+            "examples": [
+                {
+                    "input": "<공백으로 구분된 입력 예시>",
+                    "output": "<출력 예시>"
+                },
+                {
+                    "input": "<공백으로 구분된 입력 예시>",
+                    "output": "<출력 예시>"
+                }
+            ]
+        },
+        "constraints": {
+            "memory": "<메모리 제약 조건>",
+            "time": "<시간 제약 조건>"
+        },
+        "code" : {
+            "code": "<줄바꿈으로 구분된 파이썬 정답 코드>"
+        }
+    }
+    '''
+tc_template = '''
+    당신은 알고리즘 문제 테스트 케이스 생성가입니다.
+    당신은 알고리즘 문제에 대한 설명을 읽고, 
+    그에 해당하는 테스트 케이스를 다음과 형식으로 20개 제공합니다.
+
+    {
+        "testcase": [ 
+            { 
+                "input": "<공백으로 구분된 입력 예시>",
+                "output": "<입력에 대한 출력>"
+            }
+        ]
+    }   
+'''
+
