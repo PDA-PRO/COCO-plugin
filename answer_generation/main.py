@@ -8,7 +8,7 @@ from app.core import security
 from app.db.base import DBCursor
 from app.plugin.interface import AbstractPlugin
 from pydantic import BaseModel
-import config
+from . import config
 
 class AskQ(BaseModel):
     content: str

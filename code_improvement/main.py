@@ -7,7 +7,7 @@ from app.api.deps import get_cursor
 from app.core import security
 from app.db.base import DBCursor
 from app.plugin.interface import AbstractPlugin
-import config
+from . import config
 
 
 class AiCode(BaseModel):

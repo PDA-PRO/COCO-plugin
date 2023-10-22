@@ -6,7 +6,7 @@ from app.db.base import DBCursor
 from app.plugin.interface import AbstractPlugin
 from app.crud.submission import submission_crud
 from app.crud.task import task_crud
-import config
+from . import config
 
 class Plugin(AbstractPlugin):
     router_path='/wpc'
