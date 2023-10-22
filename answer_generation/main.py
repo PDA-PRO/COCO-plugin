@@ -1,4 +1,5 @@
 import json
+import os
 from bs4 import BeautifulSoup
 from fastapi import Depends
 import openai
@@ -46,6 +47,13 @@ class Plugin(AbstractPlugin):
     "code": "<답변에 필요한 예시 코드>",
     "content": "<질문에 대한 답변>"
 }
+
+프로그래밍과 관련되지 않은 질문이라면 다음과 같은 JSON 형식을 사용해서 알려주세요:
+{
+    "code": "False",
+    "content": "<질문에 대한 답변>"
+}
+
             ''' % (info.content)
             # GPT에 보낼 질문
             else:
