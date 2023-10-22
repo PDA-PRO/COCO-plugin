@@ -4,7 +4,7 @@
 - 정해진 알고리즘 문제에 대해서만 작동
 - https://github.com/PDA-PRO/COCO_AI 에서 coco-ai 컨테이너 설치 필요
 
-[사진]
+![image](https://github.com/PDA-PRO/COCO-plugin/assets/80380576/4b0fd0a5-c207-4e56-84a3-4bed2da2bf96)
 
 #### 설정값
 
