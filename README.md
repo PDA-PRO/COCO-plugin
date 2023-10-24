@@ -2,7 +2,7 @@
 
 한국어|[English](https://github.com/PDA-PRO/COCO-plugin/blob/main/README.eng.md)  
 AI 문제 생성, AI 답변 생성 등 AI를 활용한 다양한 확장 기능을 플러그인으로 간편하게 적용해보세요  
-새로운 플러그인을 개발하고 싶다면 https://github.com/PDA-PRO/COCO-plugin/blob/main/README.develop.md를 참고해주세요
+새로운 플러그인을 개발하고 싶다면 https://github.com/PDA-PRO/COCO-plugin/blob/main/README.develop.md 를 참고해주세요
 
 ## COCO에 추가할 수 있는 플러그인 목록
 
