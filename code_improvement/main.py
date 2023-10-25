@@ -31,13 +31,10 @@ class Plugin(AbstractPlugin):
     @staticmethod
     def test():
         return 1
-    
-    @staticmethod
-    def endpoint_temp(name:str):
-        return name
 
     @staticmethod
-    def endpoint_main(info: AiCode, token: dict = Depends(security.check_token), db_cursor:DBCursor=Depends(get_cursor)):      
+    def endpoint_main(info: AiCode, token: dict = Depends(security.check_token), db_cursor:DBCursor=Depends(get_cursor)):  
+        Plugin.enable_onoff(db_cursor)
          # 해당 코드에 대한 ai 코드가 있는지 확인
         ai_code:Plugin.TableModel=Plugin.read(db_cursor,sub_id=info.sub_id)
 

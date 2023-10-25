@@ -20,6 +20,7 @@ class Plugin(AbstractPlugin):
         
     @staticmethod
     def endpoint_main(task_id:int,sub_id:int,db_cursor:DBCursor=Depends(get_cursor)):
+        Plugin.enable_onoff(db_cursor)
         result=[]
         sql='SELECT sub.code FROM coco.sub_ids as ids, coco.submissions as sub where ids.task_id=%s and sub.id=ids.sub_id and sub.status=3;'
         result=db_cursor.select_sql(sql,[task_id])

@@ -33,6 +33,7 @@ class Plugin(AbstractPlugin):
         
     @staticmethod
     def endpoint_main(info: CreateTask, db_cursor:DBCursor=Depends(get_cursor)):
+        Plugin.enable_onoff(db_cursor)
         if info.is_final == False:
             prompt = '''
 %s

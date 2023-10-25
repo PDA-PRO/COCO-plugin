@@ -59,7 +59,9 @@ class Plugin(AbstractPlugin):
         '''
         ai 플러그인의 메인 동작을 구현
         endpoint 접두사는 꼭 필요합니다.
+        Plugin.enable_onoff(db_cursor)를 사용하여 런타임중 엔드포인트를 비활성화 할 수 있습니다.
         -----------------------------
         params
         - db_cursor : db에 조작을 위한 cursor
         '''
+        Plugin.enable_onoff(db_cursor)

@@ -47,7 +47,7 @@ class Plugin(AbstractPlugin):
         returns
         - status : wpc 분석 결과 `1`분석 성공 `2`TC틀림 오답이 아님 `3`wpc 불가능 문제 `4`512토큰 초과
         """
-        
+        Plugin.enable_onoff(db_cursor)
         prev_result:Plugin.TableModel=Plugin.read(db_cursor,sub_id=sub_id)
         if prev_result:
             if prev_result.status==2: #TC 실패로 틀린 제출이 아님
