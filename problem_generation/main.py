@@ -109,7 +109,7 @@ class Plugin(AbstractPlugin):
                 db_cursor.execute_sql(sql,data)
 
             #desc에서 임시 이미지 삭제 및 실제 이미지 저장
-            maindesc=image.save_update_image(os.path.join(os.getenv("TASK_PATH"),"temp"),os.path.join(os.getenv("TASK_PATH"),str(task_id)),description,task_id,"s")
+            maindesc=image.save_update_image(os.path.join(os.getenv("TASK_PATH"),"temp"),os.path.join(os.getenv("TASK_PATH"),str(task_id)),info.form_data,task_id,"s")
 
             #desc 저장
             sql="insert into coco.descriptions values (%s,%s,%s,%s);"
