@@ -1,4 +1,4 @@
-from fastapi import Depends
+from fastapi import HTTPException,Depends
 from app.api.deps import get_cursor
 from app.db.base import DBCursor
 from app.plugin.interface import AbstractPlugin
@@ -49,14 +49,21 @@ class Plugin(AbstractPlugin):
                 code_ids_list[i][j]=(code_ids_list[i][j]-min_v)/(max_v-min_v)
 
         #인덱스 생성
-        kmeans = faiss.Kmeans(max_token_len,clustering_k)
-        kmeans.train(code_ids_list)
+        try:
+            kmeans = faiss.Kmeans(max_token_len,clustering_k)
+            kmeans.train(code_ids_list)
 
-        index = faiss.IndexFlatL2(max_token_len)
-        index.add(code_ids_list)
-        D, I = index.search(kmeans.centroids, 1) 
-        return_list=[]
-        for i in zip(I,D):
-            return_list.append({'code':code_list[i[0][0]],'distance':float(i[1][0])})
+            index = faiss.IndexFlatL2(max_token_len)
+            index.add(code_ids_list)
+            D, I = index.search(kmeans.centroids, 1) 
+            return_list=[]
+            for i in zip(I,D):
+                return_list.append({'code':code_list[i[0][0]],'distance':float(i[1][0])})
 
-        return return_list
+            return return_list
+        except:
+            raise HTTPException(
+                status_code=500,
+                detail="코드 클러스터는 10개 이상의 정답 코드가 필요합니다.",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
