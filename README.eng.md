@@ -11,6 +11,7 @@ If you want to develop a new plugin, please refer to https://github.com/PDA-PRO/
 - [AI code improvements](https://github.com/PDA-PRO/COCO-plugin/tree/main/code_improvement)
 - [AI problem creation](https://github.com/PDA-PRO/COCO-plugin/tree/main/problem_generation)
 - [Wong Part of Code](https://github.com/PDA-PRO/COCO-plugin/tree/main/wpc)
+  **Additional settings are required for application. Please visit the link and make additional settings**
 
 ## precondition
 

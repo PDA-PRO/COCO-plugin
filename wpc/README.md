@@ -3,13 +3,13 @@
 ### 적용을 위한 추가 설정
 
 - https://github.com/PDA-PRO/COCO_AI 에서 coco-ai 컨테이너 설치
-- 도커 네트워크에 wpc 플러그인 추가
+- 도커 네트워크에 wpc 플러그인 추가를 위해 다음 명령어를 실행
 
-```
+```bash
 docker network connect coco_network coco-ai
 ```
 
-- `config.py`의 `WPC_URL` 수정
+- `config.py` 파일의 `WPC_URL` 수정
 
 ```python
 WPC_URL="http://coco-ai:8000"

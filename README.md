@@ -10,7 +10,7 @@ AI 문제 생성, AI 답변 생성 등 AI를 활용한 다양한 확장 기능�
 - [코드 클러스터](https://github.com/PDA-PRO/COCO-plugin/tree/main/code_cluster)
 - [AI 코드 개선](https://github.com/PDA-PRO/COCO-plugin/tree/main/code_improvement)
 - [AI 문제 생성](https://github.com/PDA-PRO/COCO-plugin/tree/main/problem_generation)
-- [Wong Part of Code](https://github.com/PDA-PRO/COCO-plugin/tree/main/wpc)
+- [Wong Part of Code](https://github.com/PDA-PRO/COCO-plugin/tree/main/wpc) **적용을 위해 추가 설정이 필요합니다. 링크를 방문하여 추가설정을 해주세요**
 
 ## 전제 조건
 
