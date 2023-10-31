@@ -38,10 +38,10 @@ cd COCO-plugin
 cp <Plugin folder> <plugin folder path>/<Plugin folder>
 ```
 
-#### Restart container
+#### Restart coco_backend container
 
 ```bash
-docker compose restart
+docker container restart coco_backend
 ```
 
 ### Windows
@@ -57,10 +57,10 @@ cd COCO-plugin
 
 #### Move the desired plugin folder to the `plugin` folder
 
-#### Restart container
+#### Restart coco_backend container
 
-```powershell
-docker compose restart
+```bash
+docker container restart coco_backend
 ```
 
 ## Use
