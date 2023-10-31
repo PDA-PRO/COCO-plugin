@@ -39,10 +39,10 @@ cd COCO-plugin
 cp 플러그인폴더 <plugin 폴더 경로>/<플러그인폴더>
 ```
 
-#### 컨테이너 재시작
+#### 백엔드 컨테이너 재시작
 
 ```bash
-docker compose restart
+docker container restart coco_backend
 ```
 
 ### Windows
@@ -58,10 +58,10 @@ cd COCO-plugin
 
 #### 원하는 플러그인 폴더를 `plugin` 폴더로 이동
 
-#### 컨테이너 재시작
+#### 백엔드 컨테이너 재시작
 
-```powershell
-docker compose restart
+```bash
+docker container restart coco_backend
 ```
 
 ## 사용하기
