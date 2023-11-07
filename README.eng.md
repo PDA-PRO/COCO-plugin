@@ -36,7 +36,7 @@ cd COCO-plugin
 #### Move the desired plugin folder to the `plugin` folder
 
 ```bash
-cp <Plugin folder> <plugin folder path>/<Plugin folder>
+cp -r <Plugin folder> <plugin folder path>/<Plugin folder>
 ```
 
 #### Restart coco_backend container
@@ -72,3 +72,17 @@ docker container restart coco_backend
 
 - You can check the status of the backend and frontend of the applied plugin
 - Plug-in endpoint on/off possible
+
+## FAQ
+
+### Incorrect plugin addition
+
+An error occurs when adding the `new_plugin_temp` template as a plugin.
+
+### Resolution
+
+Remove the `new_plugin_temp` template from the plugin folder.
+
+## License
+
+[Apache2.0](https://www.apache.org/licenses/LICENSE-2.0)

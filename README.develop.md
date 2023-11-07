@@ -1,7 +1,6 @@
 # COCO 플러그인 개발
 
-한국어|English  
-현재 `v1.0.0` 버전에서는 제한적으로만 플러그인을 개발할 수 있습니다.
+현재 최신 버전에서는 제한적으로만 플러그인을 개발할 수 있습니다.
 
 ## 환경 세팅
 
@@ -108,6 +107,14 @@ mkdir ./new_plugin
        @staticmethod
        def endpoint_method():
            pass
+      ```
+
+   4. endpoint 동적 on/off  
+      아래와 같이 endpoint_method의 상단에 `Plugin.enable_onoff`를 추가하여 동적 on/off를 적용합니다.
+      ```python
+      @staticmethod
+      def endpoint_method():
+         Plugin.enable_onoff(db_cursor)
       ```
 
 ### 프론트엔드 GUI 개발

@@ -36,7 +36,7 @@ cd COCO-plugin
 #### 원하는 플러그인 폴더를 `plugin` 폴더로 이동
 
 ```bash
-cp 플러그인폴더 <plugin 폴더 경로>/<플러그인폴더>
+cp -r <플러그인폴더> <plugin 폴더 경로>/<플러그인폴더>
 ```
 
 #### 백엔드 컨테이너 재시작
@@ -72,3 +72,17 @@ docker container restart coco_backend
 
 - 적용된 플러그인의 백엔드와 프론트엔드의 상태를 확인 가능
 - 플러그인의 엔드포인트 On/Off 가능
+
+## FAQ
+
+### 올바르지 않는 플러그인 추가
+
+`new_plugin_temp` 템플릿을 플러그인으로 추가할 경우 오류가 발생합니다.
+
+### 해결 방법
+
+`new_plugin_temp` 템플릿을 플러그인 폴더에서 제거합니다.
+
+## 라이선스
+
+[Apache2.0](https://www.apache.org/licenses/LICENSE-2.0)
