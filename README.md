@@ -83,6 +83,18 @@ docker container restart coco_backend
 
 `new_plugin_temp` 템플릿을 플러그인 폴더에서 제거합니다.
 
+------------
+### 플러그인 종속 패키지 설치 오류
+
+플러그인의 상태가 모두 `enable`이지만 패키지가 없다는 오류가 발생할 경우
+
+### 해결 방법
+
+`plugin` 폴더의 각 플러그인에서 `.cache` 파일을 삭제합니다  
+이후 백엔드를 재시작합니다.
+```bash
+docker container restart coco_backend
+```
 ## 라이선스
 
 [Apache2.0](https://www.apache.org/licenses/LICENSE-2.0)
