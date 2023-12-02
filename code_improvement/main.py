@@ -27,6 +27,7 @@ class Plugin(AbstractPlugin):
         sub_id: int
         code: str
         desc: str
+        lang: int
 
     @staticmethod
     def test():

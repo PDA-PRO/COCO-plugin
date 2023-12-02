@@ -74,7 +74,7 @@ class Plugin(AbstractPlugin):
 위 문제의 출력 설명은 다음과 같습니다
 : %s
 
-다음 정보를 고려해서 위 문제에 대한 파이썬 테스트 케이스를 만들어 주세요
+다음 정보를 고려해서 위 문제에 대한 테스트 케이스를 만들어 주세요
 단, 입력이 0 이거나 없는 경우는 빼고 만들어 주세요
 ''' % (description, input_desc, output_desc)
             print(prompt)
