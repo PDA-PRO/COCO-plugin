@@ -21,12 +21,13 @@ class Plugin(AbstractPlugin):
     @staticmethod
     def endpoint_main(task_id:int,sub_id:int,db_cursor:DBCursor=Depends(get_cursor)):
         Plugin.enable_onoff(db_cursor)
-        result=[]
-        sql='SELECT sub.code FROM coco.sub_ids as ids, coco.submissions as sub where ids.task_id=%s and sub.id=ids.sub_id and sub.status=3;'
-        result=db_cursor.select_sql(sql,[task_id])
-        my_code_sql='SELECT sub.code FROM coco.sub_ids as ids, coco.submissions as sub where ids.task_id=%s and sub.id=%s'
+        my_code_sql='SELECT sub.code,sub.lang FROM coco.sub_ids as ids, coco.submissions as sub where ids.task_id=%s and sub.id=%s'
         my_code_result=db_cursor.select_sql(my_code_sql,[task_id,sub_id])[0]
         code_list=[my_code_result['code']]
+        my_code_lang=my_code_result['lang']
+        result=[]
+        sql='SELECT sub.code FROM coco.sub_ids as ids, coco.submissions as sub where ids.task_id=%s and sub.id=ids.sub_id and sub.status=3 and sub.lang=%s;'
+        result=db_cursor.select_sql(sql,[task_id,my_code_lang])
         for i in result:
             code_list.append(i['code'])
 
